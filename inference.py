@@ -27,13 +27,9 @@ import sys
 import logging as log
 from openvino.inference_engine import IENetwork, IECore
 
-# MODEL = "/home/workspace/model/frozen_inference_graph.xml"
-# CPU_EXTENSION = "/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so"
-
-
 class Network:
     """
-    Load and configure inference plugins for the specified target devices
+    Load and configure inference plugins for the specified target devices 
     and performs synchronous and asynchronous modes for the specified infer requests.
     """
 
@@ -45,67 +41,67 @@ class Network:
         self.output_blob = None
         self.exec_network = None
         self.infer_request = None
-
+        
 
     def load_model(self, model, device = "CPU", cpu_extension = None):
         '''
         Load the model given IR files. Defaults device = CPU.
         Asynchronous requests made within.
         '''
-        ### TODO: Load the model ###
+        ### TODO: Load the model ###        
         model_xml = model
         model_bin = os.path.splitext(model_xml)[0] + ".bin"
-
+        
+        # Initialize the core
         self.core = IECore()
+        
+        # Read the IR as an IENetwork
         self.network = IENetwork(model = model_xml, weights = model_bin)
-
+        
         ### TODO: Check for supported layers ###
-        supported_layers = core.query_network(self.network, device)
-
+        supported_layers = self.core.query_network(self.network, device)
         unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
-        if len(unsupported_layers) != 0:
-            print("[Inference Engine] Unsupported layers found: \n {}".format(unsupported_layers))
-            print("[Inference Engine] Check to see if unsupported extensions are available to IECore")
-            print("[Inference Engine] If not available, add as custom layers")
-            exit(1)
 
         ### TODO: Add any necessary extensions ###
-        if cpu_extension and "CPU" in device:
-            self.core.addextension(cpu_extension, device)
-
+        # Add cpu extension if any unsupported layers are found
+        if (len(unsupported_layers) != 0) and (cpu_extension and "CPU" in device):
+            self.core.add_extension(cpu_extension, device)
+            
         ### TODO: Return the loaded inference plugin ###
         ### Note: You may need to update the function parameters. ###
-
-        self_exec_network = self.core.load_network(self.network, device)
-        print("[Inference Engine] IR successfully loaded into Inference Engine")
-
+        self.exec_network = self.core.load_network(self.network, device)
+        
         # Get input layer
         self.input_blob = next(iter(self.network.inputs))
         self.output_blob = next(iter(self.network.outputs))
-
-        return
+        
+        return self.exec_network
 
     def get_input_shape(self):
         '''
         This gets the input shape of the network
         '''
         ### TODO: Return the shape of the input layer ###
-        input_shape = self.network.inputs[self.input_blob].shape
-        print("[Inference Engine] Input shape found!")
-        return input_shape
+        input_shapes = {}
+        for network_input in self.network.inputs:
+            input_shapes[network_input] = (self.network.inputs[network_input].shape)
+        return input_shapes
 
-    def exec_net(self, frame):
+    def exec_net(self, network_input, request_id):
+        '''
+        Makes an asynchronous inference request, given an input image.
+        '''
         ### TODO: Start an asynchronous request ###
-        self.exec_network.start_async(request_id = 0, inputs={self.input_blob: image})
-
+        self.infer_request_handle = self.exec_network.start_async(request_id = 0, inputs = network_input)
+        
         ### TODO: Return any necessary information ###
         ### Note: You may need to update the function parameters. ###
         return
 
     def wait(self):
         ### TODO: Wait for the request to be complete. ###
-        status = self.exec_network.requests[0].wait(-1)
-
+        status = self.infer_request_handle.wait()
+        
         ### TODO: Return any necessary information ###
         ### Note: You may need to update the function parameters. ###
         return status
@@ -117,4 +113,4 @@ class Network:
         ### TODO: Extract and return the output results
         ### Note: You may need to update the function parameters. ###
         return self.exec_network.requests[0].outputs[self.output_blob]
-        
+    
