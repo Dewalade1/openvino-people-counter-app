@@ -164,7 +164,7 @@ The Intermediate Representation model is obviously better at minimizing CPU Over
 
 When deploying at the Edge, the app requires low amounts of internet speed to exchange data with the server. This is because all processing and calculation is done on the local device and only the result is sent to the server or recipient device though the internet or edge model can be used with very low internet speeds compared to deploying on the cloud.
 
-The cost of renting quality servers for data storage and processing is high. Cloud services perform majority of their computations on servers and thus for a good cloud-based app, quality servers are needed. Also, the larger the scope of our app, the larger the amount of computations hence, the greater the number of servers needed to perform these computations as quickly as possible. This results in an exponential increase in hardware costs. This cost is saved when deploying at the edge as the device only needs minimal processing power to run. This is because the app runs locally on a device and requires little to no servers to operate it.
+Cost of renting quality servers for data storage and processing is high. Cloud services perform majority of their computations on servers and thus for a good cloud-based app, quality servers are needed. Also, the larger the scope of our app, the larger the amount of computations hence, the greater the number of servers needed to perform these computations as quickly as possible. This results in an exponential increase in hardware costs. This cost is saved when deploying at the edge as the device only needs minimal processing power to run. This is because the app runs locally on a device and requires little to no servers to operate it.
 
 Edge computing also results in lower latency than cloud services. This is because cloud services are highly dependent on the internet for processing which usually takes place on a server in a different location from the location of the application device itself. This device's functionality can be compromised if it's deployed in remote areas where there is little internet speed. The Edge applications, however, do not have this problem because all computing is done locally and only the results are sent to the recipients' devices. This greatly minimizes network requirements and also reduces latency to the bare minimum. Remember that the average inference time of our app on the classroom workspace was 885.2475ms and the average inference time was 84.205ms when tested on my local device. If we take the online workspace as a form of cloud processing, and the local device as Edge processing, we can say that Edge computing results lower latency than cloud computing. This means that better service can be provided when deploying our app in remote areas by deploying at the edge than if we relied on cloud computing.
 
@@ -231,50 +231,6 @@ Lighting, model accuracy, weather, visibility, camera focal length, and image si
 - **Visibility:** The visibility in the area of deployment directly affects the accuracy of models in the Edge application. If the app is deploys in areas with large amounts of particles in the air such as desserts, the visibility would be reduced on windy days and during sandstorms by sand particles carried by the wind. Snowstorms, hail, rain and hurricanes and gales also reduce the visibility in the area while bright and clear weather such as sunny or cloudy weather provide high levels of visibility. Other natural phenomena also affect the level of visibility in a cameras range of view.
 
   The visibility is also affected by the level of maintainance done on the camera. Assuming all other factors affecting visibility are good and the camera is well maintained and its lenses are cleaned regularly, the visibility would be good. However, a poorly maintained camera would have poor visibility because their would be a lot if dirt and residue on the camera lens. Poor visibility results in blurry or bad images being captured by the camera which affects the accuracy of the model's prediction. This in turn affects the performance of our application. Because of this, excellent visibility is recommended for optimal results. Good visibility can be achieved by regularly maintaining the camera, and especially, cleaning the lenses of the camera as often as possible. In situations where the visibility is affected by natural phenomena, the best that can be done would be to shield the devices and cameras from the elements so as to prolong their lifespan.
-
-## Model Research
-
-In investigating potential models that would be suitable for the people counter app, I tried each of the following three models:
-
-- Model 1: [SSDlite mobilenet v2 coco]
-
-  - [http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz]
-
-  - I unzipped the downloaded archive of this model and converted this model to an Intermediate Representation with the following arguments:
-
-    ```bash
-    wget http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
-
-    tar -xvf ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
-
-    cd ssdlite_mobilenet_v2_coco_2018_05_09
-
-    python /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
-    ```
-
-  - After converting the model to Intermediate Representation, it had a total size of 64.1MB and its inference time ranged between approximately 68ms to 70ms and occasionally reaching inference times of approximately 31ms. The model has a fast inference time, small storage size suitable for edge applications and was able to detect some people with a good degree of accuracy. However, this model was found to be insufficient because it was unable to detect the first person to enter the video in black clothing when the person was standing still despite said person spending fourteen seconds in the video.
-
-  - In an attempt to improve the model, I lowered the probability threshold to 0.3 but there was no significant change in the results. The model was still unable to detect the first person in black clothing while standing still. As such, the model was deemed unfit for the project.
-
-- Model 2: [SSD inception v2 coco]
-
-  - [http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz]
-
-  - I unzipped the downloaded archive of this model and converted this model to an Intermediate Representation with the following arguments:
-
-    ```bash
-    wget http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz
-
-    tar -xvf ssd_inception_v2_coco_2018_01_28.tar.gz
-
-    cd ssd_inception_v2_coco_2018_01_28
-
-    python /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
-    ```
-
-  - Upon testing after conversion, the Intermediate Represention had a total size of 95.4MB and Inference times ranging between approximately 153ms to 277ms. I observed that the model has an average size and its inference time was managable for edge application but we can find models that would yield much better results. Its detection accuracy was good with most people that appeared in the video, however, the model was unable to detect the first person to enter the video in black clothing while the person was standing still.
-
-  - In an attempt to improve the model, I tried lowering the probability threshold to 0.3 but there was no change in the results. The model was still unable to detect the first person in black clothing while standing still. As such, the model was deemed unfit for the project.
 
 ## Conclusion
 
