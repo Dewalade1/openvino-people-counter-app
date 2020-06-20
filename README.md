@@ -1,12 +1,12 @@
 # Deploy a People Counter App at the Edge
 
-| Details               |
-| --------------------- |
+| Details               |                  |
+| --------------------- |------------------|
 | Programming Language: | Python 3.5 / 3.6 |
 
-| Processing Requirements |
-| ----------------------- |
-| Min storage             | 150MB |
+| Processing Requirements |       |
+| ----------------------- |-------|
+| Min storage             | 100MB |
 | RAM                     | 8GB |
 
 ![people-counter-python](./images/people-counter-image.png)
@@ -27,7 +27,7 @@ It also works with images of these formats as input: `.jpg`, `.bmp`, `.dpx`, `.p
 
 ## What model was used
 
-Model Used is the tensorflow model **faster_rcnn_inception_v2_coco_2018_01_28**.
+Model Used is the tensorflow model **SSD Mobilenet v2 coco 2018**.
 You can download the model direcly from the tensorflow model zoo by using this [link](http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz).
 
 ## Requirements
@@ -51,13 +51,17 @@ You can download the model direcly from the tensorflow model zoo by using this [
 
 Kindly refer to the relevant instructions for your operating system for this step.
 
--[Linux/Ubuntu](./linux-setup.md) -[Mac](./mac-setup.md) -[Windows](./windows-setup.md)
+-[Linux/Ubuntu](./linux-setup.md)
+-[Mac](./mac-setup.md)
+-[Windows](./windows-setup.md)
 
 ### Install Nodejs and its dependencies
 
 Kindly refer to the relevant instructions for your operating system for this step.
 
--[Linux/Ubuntu](./linux-setup.md) -[Mac](./mac-setup.md) -[Windows](./windows-setup.md)
+-[Linux/Ubuntu](./linux-setup.md)
+-[Mac](./mac-setup.md)
+-[Windows](./windows-setup.md)
 
 ### Install required npm components
 
@@ -184,7 +188,7 @@ _Depending on whether you are using **Linux**, **windows** or **Mac**, the filen
 Though by default application runs on CPU, this can also be explicitly specified by `-d CPU` command-line argument:
 
 ```bash
-python main.py -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a browser.
@@ -194,7 +198,7 @@ To see the output on a web based interface, open the link [http://0.0.0.0:3004](
 To run on the Intel® Neural Compute Stick, use the `-d MYRIAD` command-line argument:
 
 ```bash
-python3.5 main.py -d MYRIAD -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python3.5 main.py -d MYRIAD -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a web browser.
@@ -208,13 +212,13 @@ To get the input video from the camera, use the `-i CAM` command-line argument. 
 For example, On **Linux** and **Mac** you write:
 
 ```bash
-python main.py -i CAM -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i CAM -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 And for **Windows**:
 
 ```bash
-python main.py -i CAM -m model/frozen_inference_graph.xml -l C:\\"Program Files (x86)"\\IntelSWTools\\openvino\\deployment_tools\\inference_engine\\lib\\intel64\\libcpu_extension_sse4.so -d CPU -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i CAM -m model/frozen_inference_graph.xml -l C:\\"Program Files (x86)"\\IntelSWTools\\openvino\\deployment_tools\\inference_engine\\lib\\intel64\\libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a browser.
@@ -226,9 +230,11 @@ User has to give `-video_size` command line argument according to the input as i
 
 These are some screenshots of my results when streaming the output video:
 
-![Streaming people Video Test](./images/streaming_result_1.png)
+![Streaming people Video Test 1](./images/streaming_result_1.png)
 
-![Streaming people video Test 2](./images/people-counter-image.png)
+![Streaming people video Test 2](./images/streaming_result_2.png)
+
+![Streaming people video Test 3](./images/people-counter-image.png)
 
 These are the image results from when I used an image as an input:
 
