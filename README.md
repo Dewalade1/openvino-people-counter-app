@@ -238,4 +238,4 @@ These are some screenshots of my results when streaming the output video:
 
 These are the image results from when I used an image as an input:
 
-![Mother and child](./images/mother-and-child.png)
+![Mother and child](./images/mother-and-child.jpg)
