@@ -51,25 +51,25 @@ You can download the model direcly from the tensorflow model zoo by using this [
 
 Kindly refer to the relevant instructions for your operating system for this step.
 
--[Linux/Ubuntu](./linux-setup.md)
--[Mac](./mac-setup.md)
--[Windows](./windows-setup.md)
+- [Linux/Ubuntu](./linux-setup.md)
+- [Mac](./mac-setup.md)
+- [Windows](./windows-setup.md)
 
 ### Install Nodejs and its dependencies
 
 Kindly refer to the relevant instructions for your operating system for this step.
 
--[Linux/Ubuntu](./linux-setup.md)
--[Mac](./mac-setup.md)
--[Windows](./windows-setup.md)
+- [Linux/Ubuntu](./linux-setup.md)
+- [Mac](./mac-setup.md)
+- [Windows](./windows-setup.md)
 
 ### Install required npm components
 
 There are three components that need to be running in separate terminals for this application to work:
 
--MQTT Mosca server
--Node.js\* Web server
--FFmpeg server
+- MQTT Mosca server
+- Node.js\* Web server
+- FFmpeg server
 
 From the main directory:
 
