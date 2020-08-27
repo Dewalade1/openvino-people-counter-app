@@ -63,6 +63,12 @@ Kindly refer to the relevant instructions for your operating system for this ste
 - [Mac](./mac-setup.md)
 - [Windows](./windows-setup.md)
 
+### Setup the required model
+
+You can use the intermediate representation of any model of your choice or download the one provided in this ![link](https://drive.google.com/drive/folders/16TdL0TzdVi6yi-hlKr5KyoGfwggsQI9j?usp=sharing).
+
+Once downloaded, unzip the folder then copy and paste the XML and BIN files in the folder to the `model` folder in the home directory. After this, the app is setup and ready for use.
+
 ### Install required npm components
 
 There are three components that need to be running in separate terminals for this application to work:
