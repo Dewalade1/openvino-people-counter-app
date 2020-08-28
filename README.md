@@ -30,6 +30,8 @@ It also works with images of these formats as input: `.jpg`, `.bmp`, `.dpx`, `.p
 Model Used is the tensorflow model **SSD Mobilenet v2 coco 2018**.
 You can download the model direcly from the tensorflow model zoo by using this [link](http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz).
 
+The Intermediate Representation (IR) of the model can be downloaded by using this [link](https://drive.google.com/drive/folders/16TdL0TzdVi6yi-hlKr5KyoGfwggsQI9j?usp=sharing). 
+
 ## Requirements
 
 ### Hardware
@@ -65,9 +67,12 @@ Kindly refer to the relevant instructions for your operating system for this ste
 
 ### Setup the required model
 
-You can use the intermediate representation of any model of your choice or download the one provided in this ![link](https://drive.google.com/drive/folders/16TdL0TzdVi6yi-hlKr5KyoGfwggsQI9j?usp=sharing).
+The model used with this application is up to you. You can either:
 
-Once downloaded, unzip the folder then copy and paste the XML and BIN files in the folder to the `model` folder in the home directory. After this, the app is setup and ready for use.
+- Download the IR I created from the SSD mobile net V1 model using the OpenVINO™ toolkit and save it in the `model` folder of this application. The IR can be found in this [link](https://drive.google.com/drive/folders/16TdL0TzdVi6yi-hlKr5KyoGfwggsQI9j?usp=sharing).
+
+- Download the intermediate representation of any of Intel's person reidentification models from the [OpenVINO™ model zoo](https://docs.openvinotoolkit.org/2020.3/_models_intel_index.html#reidentification_models) using the [model downloader](https://docs.openvinotoolkit.org/2020.2/_tools_downloader_README.html) by following these [instructions](https://docs.openvinotoolkit.org/2020.2/_tools_downloader_README.html).
+
 
 ### Install required npm components
 
@@ -194,7 +199,7 @@ _Depending on whether you are using **Linux**, **windows** or **Mac**, the filen
 Though by default application runs on CPU, this can also be explicitly specified by `-d CPU` command-line argument:
 
 ```bash
-python main.py -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/ssd_mobilenet_v1_coco.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a browser.
@@ -204,7 +209,7 @@ To see the output on a web based interface, open the link [http://0.0.0.0:3004](
 To run on the Intel® Neural Compute Stick, use the `-d MYRIAD` command-line argument:
 
 ```bash
-python3.5 main.py -d MYRIAD -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/frozen_inference_graph.xml | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
+python3.5 main.py -d MYRIAD -i resources/videos/Pedestrian_Detect_2_1_1.mp4 -m model/ssd_mobilenet_v1_coco.xml | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a web browser.
@@ -218,13 +223,13 @@ To get the input video from the camera, use the `-i CAM` command-line argument. 
 For example, On **Linux** and **Mac** you write:
 
 ```bash
-python main.py -i CAM -m model/frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i CAM -m model/ssd_mobilenet_v1_coco.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 And for **Windows**:
 
 ```bash
-python main.py -i CAM -m model/frozen_inference_graph.xml -l C:\\"Program Files (x86)"\\IntelSWTools\\openvino\\deployment_tools\\inference_engine\\lib\\intel64\\libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
+python main.py -i CAM -m model/ssd_mobilenet_v1_coco.xml -l C:\\"Program Files (x86)"\\IntelSWTools\\openvino\\deployment_tools\\inference_engine\\lib\\intel64\\libcpu_extension_sse4.so -d CPU | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 30 -i - http://0.0.0.0:3004/fac.ffm
 ```
 
 To see the output on a web based interface, open the link [http://0.0.0.0:3004](http://0.0.0.0:3004/) in a browser.
